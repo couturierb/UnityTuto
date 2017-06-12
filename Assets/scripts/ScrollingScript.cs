@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 public class ScrollingScript : MonoBehaviour
 {
@@ -37,12 +38,10 @@ public class ScrollingScript : MonoBehaviour
 		{
 			// On récupère les objets enfants qui ont un renderer
 			backgroundPart = new List<Transform>();
-
 			for (int i = 0; i < transform.childCount; i++)
 			{
 				Transform child = transform.GetChild(i);
-
-				if (child.renderer != null)
+				if (child.GetComponent<Renderer>() != null)
 				{
 					backgroundPart.Add(child);
 				}
@@ -88,14 +87,14 @@ public class ScrollingScript : MonoBehaviour
 				if (firstChild.position.x < Camera.main.transform.position.x)
 				{
 					// On vérifie maintenant s'il n'est plus visible de la caméra
-					if (firstChild.renderer.IsVisibleFrom(Camera.main) == false)
+					if (firstChild.GetComponent<Renderer>().IsVisibleFrom(Camera.main) == false)
 					{
 						// On récupère le dernier élément de la liste
 						Transform lastChild = backgroundPart.LastOrDefault();
 
 						// On calcule ainsi la position à laquelle nous allons replacer notre morceau
 						Vector3 lastPosition = lastChild.transform.position;
-						Vector3 lastSize = (lastChild.renderer.bounds.max - lastChild.renderer.bounds.min);
+						Vector3 lastSize = (lastChild.GetComponent<Renderer>().bounds.max - lastChild.GetComponent<Renderer>().bounds.min);
 
 						// On place le morceau tout à la fin
 						// Note : ne fonctionne que pour un scorlling horizontal
